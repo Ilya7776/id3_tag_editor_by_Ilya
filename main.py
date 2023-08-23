@@ -43,7 +43,7 @@ class Main(QMainWindow):
         print(f)
         
         if self.album_image != '':
-            with open('file_of_image', 'rb') as img_in:
+            with open(self.album_image, 'rb') as img_in:
                 f['artwork'] = img_in.read()
                 
         f.remove_tag('album')
