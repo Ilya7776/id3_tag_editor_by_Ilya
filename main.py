@@ -127,22 +127,22 @@ class Main(QMainWindow):
         
         if self.check_find.isChecked():
             
-            art = f['artist']
-            alb = f['artist']
-            gen = f['genre']
+            art = str(f['artist'])
+            alb = str(f['artist'])
+            gen = str(f['genre'])
             
             if self.trash in art:
-                art = art.replace(self.trash)
+                art = art.replace(self.trash, '')
                 f.remove_tag('artist')
                 f['artist'] = art
                 
             if self.trash in alb:
-                alb = alb.replace(self.trash)
+                alb = alb.replace(self.trash, '')
                 f.remove_tag('album')
                 f['album'] = alb
             
             if self.trash in gen:
-                gen = gen.replace(self.trash)
+                gen = gen.replace(self.trash, '')
                 f.remove_tag('genre')
                 f['genre'] = gen
 
