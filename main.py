@@ -97,12 +97,12 @@ class Main(QMainWindow):
             self.messege.setText("select a folder")
         else:
             self.filenames = listdir(self.folder)
+            print(self.filenames)
             return self.filenames
     
     def get_image_for_album(self):
         self.album_image = QFileDialog.getOpenFileName(self, "Select image", ".")
         self.messege.setText("<br>you have selected an image: <b>{}</b>".format(self.album_image))
-        print(self.album_image)
         pixmap = QPixmap(self.album_image[0])
         self.image_of_album.setPixmap(pixmap)
     
@@ -148,7 +148,9 @@ class Main(QMainWindow):
 
         if self.check_image.isChecked():
             if self.album_image != '':
-                with open(self.album_image[0], 'rb') as img_in:
+                img = self.album_image[0]
+                with open(img, 'rb') as img_in:
+                    f.remove_tag('artwork')
                     f['artwork'] = img_in.read()
         
         f.remove_tag('comment')
