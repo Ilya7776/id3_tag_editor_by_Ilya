@@ -13,6 +13,7 @@ class Main(QMainWindow):
         self.comment = "redactor_ID3fromIly"
         self.filenames = ""
         self.album_image = ''
+        self.trash = ''
         super().__init__()
         uic.loadUi('front.ui', self)
         self.start_process_button.clicked.connect(self.master_traks)
@@ -23,7 +24,39 @@ class Main(QMainWindow):
         self.check_album.clicked.connect(self.checkbox_return)
         self.check_genre.clicked.connect(self.checkbox_return)
         self.check_image.clicked.connect(self.checkbox_return)
+        self.check_find.clicked.connect(self.find_trash)
     
+    def find_trash(self):
+        if self.check_find.isChecked():
+            self.label_find.setEnabled(True)
+            self.input_find.setEnabled(True)
+            
+            self.check_artist.setChecked(False)
+            self.check_album.setChecked(False)
+            self.check_genre.setChecked(False)
+            self.check_image.setChecked(False)
+            
+            self.check_artist.setDisabled(True)
+            self.check_album.setDisabled(True)
+            self.check_genre.setDisabled(True)
+            self.check_image.setDisabled(True)
+
+        else:
+            self.label_find.setDisabled(True)
+            self.input_find.setDisabled(True)
+            
+            self.check_artist.setChecked(True)
+            self.check_album.setChecked(True)
+            self.check_genre.setChecked(True)
+            self.check_image.setChecked(True)
+            
+            self.check_artist.setDisabled(False)
+            self.check_album.setDisabled(False)
+            self.check_genre.setDisabled(False)
+            self.check_image.setDisabled(False)
+        
+        self.checkbox_return()
+        
     def checkbox_return(self):
         if self.check_artist.isChecked():
             self.label_artist.setEnabled(True)
@@ -52,6 +85,8 @@ class Main(QMainWindow):
         else:
             self.image_of_album.setDisabled(True)
             self.album_image_link.setDisabled(True)
+            
+
             
     def get_folder(self):
         self.folder = QFileDialog.getExistingDirectory(self,"Select folder",".")
@@ -88,8 +123,29 @@ class Main(QMainWindow):
         if self.check_genre.isChecked():
             f.remove_tag('genre')
             f['genre'] = self.genre
-
+            
         
+        if self.check_find.isChecked():
+            
+            art = f['artist']
+            alb = f['artist']
+            gen = f['genre']
+            
+            if self.trash in art:
+                art = art.replace(self.trash)
+                f.remove_tag('artist')
+                f['artist'] = art
+                
+            if self.trash in alb:
+                alb = alb.replace(self.trash)
+                f.remove_tag('album')
+                f['album'] = alb
+            
+            if self.trash in gen:
+                gen = gen.replace(self.trash)
+                f.remove_tag('genre')
+                f['genre'] = gen
+
         if self.check_image.isChecked():
             if self.album_image != '':
                 with open(self.album_image[0], 'rb') as img_in:
@@ -104,6 +160,7 @@ class Main(QMainWindow):
         self.album = self.input_album.text()
         self.artist = self.input_artist.text()
         self.genre = self.input_genre.text()
+        self.trash = self.input_find.text()
         self.get_names()
         for name_of_track in self.filenames:
             self.function_tag(name_of_track)
@@ -118,6 +175,8 @@ class Main(QMainWindow):
         self.album = ""
         self.artist = ""
         self.genre = ""
+        self.trash = ''
+        self.input_find.setText("")
         self.messege.setText("messege")
         self.image_of_album.setText("image")
     
